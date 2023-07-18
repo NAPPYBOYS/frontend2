@@ -11,7 +11,7 @@ export const ModelCreatePage: React.FunctionComponent = () => {
     let navigate = useNavigate();
     const [datasets, setDatasets] = React.useState<DatasetListView[]>([])
     const [selectedDataset, setSelectedDataset] = React.useState<DatasetListView>({} as DatasetListView)
-    const [trainParameters, setTrainParameters] = React.useState<TrainParameters>({} as TrainParameters);
+    const [trainParameters, ] = React.useState<TrainParameters>({} as TrainParameters);
     const [inceptionParams, setInceptionParams] = React.useState<InceptionParams>({} as InceptionParams);
     const [snackbarOpen, setSnackbarOpen] = React.useState<boolean>(false);
     const [snackbarMessage, setSnackbarMessage] = React.useState<string>("");
@@ -25,9 +25,6 @@ export const ModelCreatePage: React.FunctionComponent = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const handleReset = () => {
-        setActiveStep(0);
-    };
 
 
     let handleClose = () => {
@@ -73,22 +70,21 @@ export const ModelCreatePage: React.FunctionComponent = () => {
                         <TextField
                             label="Input Length"
                             type="number"
-                            onChange={(e) => handleTrainParametersChange(e.target.value, "input_size")}
+                            onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "input_length")}
                         />
                         <TextField
                             label="Learning Rate"
-                            type="number"
-                            value={inceptionParams.learning_rate}
+                            onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "learning_rate")}
                         />
                         <TextField
                             label="Batch Size"
                             type="number"
-                            value={inceptionParams.batch_size}
+                            onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "batch_size")}
                         />
                         <TextField
                             label="Epochs"
                             type="number"
-                            value={inceptionParams.epochs}
+                            onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "epochs")}
                         />
                         <Typography gutterBottom>Validation Split</Typography>
                         <Slider
@@ -97,18 +93,20 @@ export const ModelCreatePage: React.FunctionComponent = () => {
                             min={0}
                             step={0.1}
                             value={inceptionParams.validation_split}
+                            onChange={(e,val) => handleInceptionParamsChange(val, "validation_split")}
                         />
                         <Divider/>
                         <Typography>Inception Architecture Parameters</Typography>
                         <TextField
                             label="N° Modules"
                             type="number"
-                            value={inceptionParams.n_modules}
+                            onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "n_modules")}
                         />
                         <TextField
                             label="Embedding Size"
                             type="number"
-                            value={inceptionParams.embedding_size}/>
+                            onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "embedding_size")}
+                        />
 
                     </FormControl>
                     <Snackbar
@@ -136,15 +134,18 @@ export const ModelCreatePage: React.FunctionComponent = () => {
             console.log(error);
         });
     }, []);
-    let handleTrainParametersChange = (value: any, key: string) => {
-        setTrainParameters((prev) => ({...prev, [key]: value}));
+    let handleInceptionParamsChange = (value: any, key: string) => {
+        setInceptionParams((prev) => ({...prev, [key]: value}));
     }
+
     let handleSubmit = (event: React.MouseEvent) => {
         event.preventDefault();
         let realTrainParameters = trainParameters as TrainParameters;
         realTrainParameters.parameters = inceptionParams as InceptionParams;
         realTrainParameters.dataset_id = selectedDataset.id;
         realTrainParameters.architecture = "INCEPTION";
+        realTrainParameters.name="INCEPTION";
+        console.log(realTrainParameters);
         api.createModelModelTrainPost(realTrainParameters).then((response) => {
             if (response.status === 200) {
                 setSeverity("success");

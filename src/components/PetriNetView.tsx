@@ -1,23 +1,37 @@
+import {Stack, Typography} from "@mui/joy";
+import React from "react";
 
-export enum ProcessModelType {
-    BaselineProcessModel = "BaselineProcessModel",
-    LearnedProcessModel = "LearnedProcessModel"
-}
 interface ProcessModelProps {
-     type:any,
-     id: string
+     title:string,
+     url: string
+}
+interface LearnedProcessModelProps {
+    id: string,
+}
+interface BaselineDisplayProps {
+    id: string,
+    algorithm: string
 }
 
-export const ProcessModelView = (props: ProcessModelProps) => {
+export const ProcessModelDisplay:React.FunctionComponent<ProcessModelProps> = (props: ProcessModelProps) => {
     return (
-        <div>
-            <h1>Process Model</h1>
-            <ul>
-                <li>{props.type}</li>
-                <li>{props.id}</li>
-            </ul>
-        </div>
+        <Stack direction="row" spacing={1}>
+            <Typography>props.title</Typography>
+            <img src={props.url} alt={props.title}/>
+        </Stack>
     );
 }
 
-//TODO: Add Trained Model Visualization
+export const BaselineProcessModelDisplay:React.FunctionComponent<BaselineDisplayProps> = (props) =>{
+    let url = "http://localhost:8000/baseline/" + props.id+"/vis";
+    return (
+        <ProcessModelDisplay url={url} title={props.algorithm+""}/>
+    );
+}
+
+export const LearnedProcessModelDisplay:React.FunctionComponent<LearnedProcessModelProps> = (props) =>{
+    let url = "http://localhost:8000/baseline/" + props.id+"/vis";
+    return (
+        <ProcessModelDisplay url={url} title="Ours"/>
+    );
+}
