@@ -1,7 +1,7 @@
 import React from 'react';
 import {DatasetListView} from "../api/api";
 import {useAPIClient} from "../api/bridge";
-import {Button, List, ListItem, Stack, Modal, ModalClose, Typography, Sheet, Box} from "@mui/joy";
+import {Button, List, ListItem, Stack, Modal} from "@mui/joy";
 import {DatasetUploadForm} from "../components/DatasetUploadForm";
 import {useNavigate} from "react-router-dom";
 

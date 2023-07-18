@@ -2,23 +2,131 @@ import React from "react";
 import {useAPIClient} from "../api/bridge";
 import {useNavigate} from "react-router-dom";
 import {TrainParameters, InceptionParams, DatasetListView} from "../api";
-import {Snackbar} from "@mui/material";
-import {Button, FormControl, Slider, Stack} from "@mui/joy";
+import {ListItemSecondaryAction, ListItemText, Snackbar, StepLabel, Stepper, StepContent, Step} from "@mui/material";
+import {Box, Button, Divider, FormControl, List, ListItem, Slider, Stack, Switch, Typography} from "@mui/joy";
 import TextField from "@mui/material/TextField";
 
 export const ModelCreatePage: React.FunctionComponent = () => {
     let api = useAPIClient();
     let navigate = useNavigate();
-    const [datasets, setDatasets] = React.useState<DatasetListView[]>([]);
+    const [datasets, setDatasets] = React.useState<DatasetListView[]>([])
+    const [selectedDataset, setSelectedDataset] = React.useState<DatasetListView>({} as DatasetListView)
     const [trainParameters, setTrainParameters] = React.useState<TrainParameters>({} as TrainParameters);
     const [inceptionParams, setInceptionParams] = React.useState<InceptionParams>({} as InceptionParams);
     const [snackbarOpen, setSnackbarOpen] = React.useState<boolean>(false);
     const [snackbarMessage, setSnackbarMessage] = React.useState<string>("");
     const [severity, setSeverity] = React.useState<"success" | "error" | "info" | "warning" | undefined>("success");
+    const [activeStep, setActiveStep] = React.useState(0);
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
+
+    const handleReset = () => {
+        setActiveStep(0);
+    };
+
+
     let handleClose = () => {
         setSnackbarOpen(false);
     }
     let steps = [
+        {
+            label: "Select a Dataset",
+            content: (
+                <Stack>
+                    <List>
+                        {datasets.map((item, index) => (
+                            <ListItem key={item.id}>
+                                <ListItemText primary={item.name}/>
+                                <ListItemSecondaryAction>
+                                    <Switch
+                                        onChange={(e) => {
+                                            if (selectedDataset.id === item.id) {
+                                                setSelectedDataset({} as DatasetListView)
+                                            } else {
+                                                setSelectedDataset(item)
+                                            }
+                                        }
+                                        }
+                                        checked={selectedDataset.id === item.id}
+                                    />
+                                </ListItemSecondaryAction>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Stack>
+            ),
+            complete: () => {
+                return selectedDataset.id !== undefined;
+            }
+        },
+        {
+            label: "Ready, Set, Train!",
+            content: (
+                <Stack>
+                    <FormControl>
+                        <Typography> General Parameters</Typography>
+                        <TextField
+                            label="Input Length"
+                            type="number"
+                            onChange={(e) => handleTrainParametersChange(e.target.value, "input_size")}
+                        />
+                        <TextField
+                            label="Learning Rate"
+                            type="number"
+                            value={inceptionParams.learning_rate}
+                        />
+                        <TextField
+                            label="Batch Size"
+                            type="number"
+                            value={inceptionParams.batch_size}
+                        />
+                        <TextField
+                            label="Epochs"
+                            type="number"
+                            value={inceptionParams.epochs}
+                        />
+                        <Typography gutterBottom>Validation Split</Typography>
+                        <Slider
+                            marks
+                            max={1}
+                            min={0}
+                            step={0.1}
+                            value={inceptionParams.validation_split}
+                        />
+                        <Divider/>
+                        <Typography>Inception Architecture Parameters</Typography>
+                        <TextField
+                            label="N° Modules"
+                            type="number"
+                            value={inceptionParams.n_modules}
+                        />
+                        <TextField
+                            label="Embedding Size"
+                            type="number"
+                            value={inceptionParams.embedding_size}/>
+
+                    </FormControl>
+                    <Snackbar
+                        open={snackbarOpen}
+                        autoHideDuration={6000}
+                        onClose={handleClose}
+                        message={snackbarMessage}
+                        color={severity}/>
+
+                </Stack>
+            ),
+            complete: () => {
+                return true;
+            }
+
+
+        }
+
 
     ];
     React.useEffect(() => {
@@ -31,13 +139,12 @@ export const ModelCreatePage: React.FunctionComponent = () => {
     let handleTrainParametersChange = (value: any, key: string) => {
         setTrainParameters((prev) => ({...prev, [key]: value}));
     }
-    let handleInceptionParamsChange = (value: any, key: string) => {
-        setInceptionParams((prev) => ({...prev, [key]: value}));
-    }
     let handleSubmit = (event: React.MouseEvent) => {
         event.preventDefault();
         let realTrainParameters = trainParameters as TrainParameters;
         realTrainParameters.parameters = inceptionParams as InceptionParams;
+        realTrainParameters.dataset_id = selectedDataset.id;
+        realTrainParameters.architecture = "INCEPTION";
         api.createModelModelTrainPost(realTrainParameters).then((response) => {
             if (response.status === 200) {
                 setSeverity("success");
@@ -54,42 +161,38 @@ export const ModelCreatePage: React.FunctionComponent = () => {
     }
 
     return (
-        <Stack>
-            <div>
-                <h1>Build A Model</h1>
-            </div>
-            <FormControl>
-                <TextField
-                label = "Model Name"
-                type = "number"
-                />
-                <Slider
-                    marks
-                    max={1}
-                    min={0}
-                    step={0.005}
-                    value={inceptionParams.learning_rate}
-                    valueLabelDisplay="auto"
-                />
-                <Slider
-                    marks
-                    max={1}
-                    min={0}
-                    step={0.1}
-                    value={inceptionParams.validation_split}
-                    valueLabelDisplay="auto"
-                />
-            </FormControl>
-            <Button onClick={(e) => handleSubmit(e)}>Train!</Button>
+        <Box sx={{maxWidth: 400}}>
+            <Stepper activeStep={activeStep} orientation="vertical">
+                {steps.map((step, index) =>
+                    (<Step key={step.label}>
+                        <StepLabel>
+                            {step.label}
+                        </StepLabel>
+                        <StepContent>
+                            {step.content}
+                            <Box sx={{mb: 2}}>
+                                <div>
+                                    <Button
+                                        disabled={!step.complete()}
+                                        onClick={index === steps.length - 1 ? (e) => handleSubmit(e) : handleNext}
+                                        sx={{mt: 1, mr: 1}}
+                                    >
+                                        {index === steps.length - 1 ? 'Train!' : 'Continue'}
+                                    </Button>
+                                    <Button
+                                        disabled={index === 0}
+                                        onClick={handleBack}
+                                        sx={{mt: 1, mr: 1}}
+                                    >
+                                        Back
+                                    </Button>
+                                </div>
+                            </Box>
+                        </StepContent>
+                    </Step>))}
+            </Stepper>
+        </Box>
+    )
+        ;
 
-            <Snackbar
-                open={snackbarOpen}
-                autoHideDuration={6000}
-                onClose={handleClose}
-                message={snackbarMessage}
-                color={severity}/>
-
-        </Stack>
-
-    );
 }

@@ -19,3 +19,5 @@ export const ProcessModelView = (props: ProcessModelProps) => {
         </div>
     );
 }
+
+//TODO: Add Trained Model Visualization

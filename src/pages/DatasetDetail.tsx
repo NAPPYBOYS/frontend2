@@ -32,7 +32,7 @@ export const DatasetDetailPage: React.FunctionComponent<any> = () => {
                 {Object.keys(valueSplits).map((split) =>
                     <>
                         <h4>{mapSnakeToHumanReadable(Object.keys(valueSplits))[split]}</h4>
-                        <RawDataTable data={valueSplits[split]}/>
+                        <RawDataTable data={valueSplits[split]} ignore={["type"]}/>
                     </>
                 )
                 }
