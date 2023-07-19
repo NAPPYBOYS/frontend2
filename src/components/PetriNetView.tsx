@@ -1,5 +1,7 @@
-import {Stack, Typography} from "@mui/joy";
+import {Box, Stack, Typography} from "@mui/joy";
 import React from "react";
+import Zoom from 'react-medium-image-zoom'
+import 'react-medium-image-zoom/dist/styles.css'
 
 interface ProcessModelProps {
      title:string,
@@ -16,8 +18,14 @@ interface BaselineDisplayProps {
 export const ProcessModelDisplay:React.FunctionComponent<ProcessModelProps> = (props: ProcessModelProps) => {
     return (
         <Stack direction="row" spacing={1}>
-            <Typography>props.title</Typography>
-            <img src={props.url} alt={props.title}/>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <h5>{props.title}</h5>
+            </Box>
+            <Zoom>
+                <img src={props.url} alt={props.title} style={{
+                    maxWidth: "50%",
+                }}/>
+            </Zoom>
         </Stack>
     );
 }
@@ -30,7 +38,7 @@ export const BaselineProcessModelDisplay:React.FunctionComponent<BaselineDisplay
 }
 
 export const LearnedProcessModelDisplay:React.FunctionComponent<LearnedProcessModelProps> = (props) =>{
-    let url = "http://localhost:8000/baseline/" + props.id+"/vis";
+    let url = "http://localhost:8000/model/" + props.id+"/process/vis";
     return (
         <ProcessModelDisplay url={url} title="Ours"/>
     );

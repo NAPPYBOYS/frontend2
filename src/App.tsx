@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import {AppBar, Toolbar} from "@mui/material";
-import {Typography} from "@mui/joy";
+import {Container, Typography} from "@mui/joy";
 import {Router} from "./Router";
 
 function App() {
@@ -14,10 +14,13 @@ function App() {
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <Router/>
+            <Container maxWidth="lg">
+                <Router/>
+            </Container>
         </div>
     );
 }
+
 // TODO: Add Styling
 
 

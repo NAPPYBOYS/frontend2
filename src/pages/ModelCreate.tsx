@@ -162,7 +162,10 @@ export const ModelCreatePage: React.FunctionComponent = () => {
     }
 
     return (
-        <Box sx={{maxWidth: 400}}>
+        <Box sx={{
+            marginTop:"10vh",
+            maxWidth: 400
+        }}>
             <Stepper activeStep={activeStep} orientation="vertical">
                 {steps.map((step, index) =>
                     (<Step key={step.label}>

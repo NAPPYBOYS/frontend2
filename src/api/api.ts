@@ -138,24 +138,6 @@ export interface CategoricalMetric {
      * @type {any}
      * @memberof CategoricalMetric
      */
-    'id'?: any;
-    /**
-     * 
-     * @type {any}
-     * @memberof CategoricalMetric
-     */
-    'created_at'?: any;
-    /**
-     * 
-     * @type {any}
-     * @memberof CategoricalMetric
-     */
-    'edited_at'?: any;
-    /**
-     * 
-     * @type {any}
-     * @memberof CategoricalMetric
-     */
     'name': any;
     /**
      * 
@@ -255,24 +237,6 @@ export interface DatasetMetrics {
      * @type {any}
      * @memberof DatasetMetrics
      */
-    'id'?: any;
-    /**
-     * 
-     * @type {any}
-     * @memberof DatasetMetrics
-     */
-    'created_at'?: any;
-    /**
-     * 
-     * @type {any}
-     * @memberof DatasetMetrics
-     */
-    'edited_at'?: any;
-    /**
-     * 
-     * @type {any}
-     * @memberof DatasetMetrics
-     */
     'values': any;
 }
 /**
@@ -281,24 +245,6 @@ export interface DatasetMetrics {
  * @interface DatetimeMetric
  */
 export interface DatetimeMetric {
-    /**
-     * 
-     * @type {any}
-     * @memberof DatetimeMetric
-     */
-    'id'?: any;
-    /**
-     * 
-     * @type {any}
-     * @memberof DatetimeMetric
-     */
-    'created_at'?: any;
-    /**
-     * 
-     * @type {any}
-     * @memberof DatetimeMetric
-     */
-    'edited_at'?: any;
     /**
      * 
      * @type {any}
@@ -424,24 +370,6 @@ export interface InceptionParams {
 export interface LearnedProcessModelView {
     /**
      * 
-     * @type {any}
-     * @memberof LearnedProcessModelView
-     */
-    'id': any;
-    /**
-     * 
-     * @type {SchemaRef}
-     * @memberof LearnedProcessModelView
-     */
-    'model': SchemaRef;
-    /**
-     * 
-     * @type {SchemaRef}
-     * @memberof LearnedProcessModelView
-     */
-    'dataset': SchemaRef;
-    /**
-     * 
      * @type {ProcessModelMetricsView}
      * @memberof LearnedProcessModelView
      */
@@ -460,24 +388,6 @@ export interface NeuralNetworkArchitecture {
  * @interface NumericalMetric
  */
 export interface NumericalMetric {
-    /**
-     * 
-     * @type {any}
-     * @memberof NumericalMetric
-     */
-    'id'?: any;
-    /**
-     * 
-     * @type {any}
-     * @memberof NumericalMetric
-     */
-    'created_at'?: any;
-    /**
-     * 
-     * @type {any}
-     * @memberof NumericalMetric
-     */
-    'edited_at'?: any;
     /**
      * 
      * @type {any}
@@ -665,6 +575,18 @@ export interface TrainedModelDetailedView {
      * @memberof TrainedModelDetailedView
      */
     'architecture': NeuralNetworkArchitecture;
+    /**
+     * 
+     * @type {any}
+     * @memberof TrainedModelDetailedView
+     */
+    'created_at': any;
+    /**
+     * 
+     * @type {any}
+     * @memberof TrainedModelDetailedView
+     */
+    'edited_at': any;
 }
 
 
@@ -766,7 +688,7 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
 
 
             if (file !== undefined) { 
-                localVarFormParams.append('file', new Blob([file], { type: "application/octet-stream", }));
+                localVarFormParams.append('file', new Blob([file], { type: "application/json", }));
             }
     
     
@@ -812,6 +734,40 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(trainParameters, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get trained neural network by id
+         * @summary Get Baseline Petri Net
+         * @param {any} processId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBaselinePetriNetBaselineProcessIdVisGet: async (processId: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'processId' is not null or undefined
+            assertParamExists('getBaselinePetriNetBaselineProcessIdVisGet', 'processId', processId)
+            const localVarPath = `/baseline/{process_id}/vis`
+                .replace(`{${"process_id"}}`, encodeURIComponent(String(processId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -928,6 +884,40 @@ export const DefaultApiAxiosParamCreator = function (configuration?: Configurati
          */
         getDatasetsDatasetGet: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/dataset`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get trained neural network by id
+         * @summary Get Learned Petri Net
+         * @param {any} modelId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getLearnedPetriNetModelModelIdProcessVisGet: async (modelId: any, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'modelId' is not null or undefined
+            assertParamExists('getLearnedPetriNetModelModelIdProcessVisGet', 'modelId', modelId)
+            const localVarPath = `/model/{model_id}/process/vis`
+                .replace(`{${"model_id"}}`, encodeURIComponent(String(modelId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -1083,6 +1073,17 @@ export const DefaultApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Get trained neural network by id
+         * @summary Get Baseline Petri Net
+         * @param {any} processId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getBaselinePetriNetBaselineProcessIdVisGet(processId: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getBaselinePetriNetBaselineProcessIdVisGet(processId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Get process model by id
          * @summary Get Baseline Process Model
          * @param {any} processId 
@@ -1123,6 +1124,17 @@ export const DefaultApiFp = function(configuration?: Configuration) {
          */
         async getDatasetsDatasetGet(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.getDatasetsDatasetGet(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get trained neural network by id
+         * @summary Get Learned Petri Net
+         * @param {any} modelId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getLearnedPetriNetModelModelIdProcessVisGet(modelId: any, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getLearnedPetriNetModelModelIdProcessVisGet(modelId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1190,6 +1202,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.createModelModelTrainPost(trainParameters, options).then((request) => request(axios, basePath));
         },
         /**
+         * Get trained neural network by id
+         * @summary Get Baseline Petri Net
+         * @param {any} processId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getBaselinePetriNetBaselineProcessIdVisGet(processId: any, options?: any): AxiosPromise<any> {
+            return localVarFp.getBaselinePetriNetBaselineProcessIdVisGet(processId, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Get process model by id
          * @summary Get Baseline Process Model
          * @param {any} processId 
@@ -1227,6 +1249,16 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
          */
         getDatasetsDatasetGet(options?: any): AxiosPromise<any> {
             return localVarFp.getDatasetsDatasetGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get trained neural network by id
+         * @summary Get Learned Petri Net
+         * @param {any} modelId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getLearnedPetriNetModelModelIdProcessVisGet(modelId: any, options?: any): AxiosPromise<any> {
+            return localVarFp.getLearnedPetriNetModelModelIdProcessVisGet(modelId, options).then((request) => request(axios, basePath));
         },
         /**
          * Get trained neural network by id
@@ -1294,6 +1326,18 @@ export class DefaultApi extends BaseAPI {
     }
 
     /**
+     * Get trained neural network by id
+     * @summary Get Baseline Petri Net
+     * @param {any} processId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public getBaselinePetriNetBaselineProcessIdVisGet(processId: any, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getBaselinePetriNetBaselineProcessIdVisGet(processId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Get process model by id
      * @summary Get Baseline Process Model
      * @param {any} processId 
@@ -1338,6 +1382,18 @@ export class DefaultApi extends BaseAPI {
      */
     public getDatasetsDatasetGet(options?: AxiosRequestConfig) {
         return DefaultApiFp(this.configuration).getDatasetsDatasetGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get trained neural network by id
+     * @summary Get Learned Petri Net
+     * @param {any} modelId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public getLearnedPetriNetModelModelIdProcessVisGet(modelId: any, options?: AxiosRequestConfig) {
+        return DefaultApiFp(this.configuration).getLearnedPetriNetModelModelIdProcessVisGet(modelId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

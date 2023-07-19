@@ -15,6 +15,7 @@ type DataTableProps = {
 export const HumanReadableDataTable: React.FunctionComponent<TableProps> = (props) => {
     const [header, setHeader] = React.useState<string[]>([]);
     const [humanReadaleHeader, setHumanReadaleHeader] = React.useState<string[]>([]);
+    const [content, setContent] = React.useState<any[]>([]);
     React.useEffect(() => {
         if (props.data.length > 0) {
             let rawHeader = Object.keys(props.data[0]);
@@ -23,13 +24,16 @@ export const HumanReadableDataTable: React.FunctionComponent<TableProps> = (prop
             }
             setHeader(rawHeader);
             setHumanReadaleHeader(convertSnakeToHumanReadable(rawHeader));
+            setContent(props.data);
         }
-    }, [props.data, header, humanReadaleHeader]);
-    return (<DataTable data={props.data} header={header} headings={humanReadaleHeader} />);
+    }, [props.data]);
+    console.log(props.data)
+    return (<DataTable data={content} header={header} headings={humanReadaleHeader} />);
 }
 
 export const RawDataTable: React.FunctionComponent<TableProps> = (props) => {
     const [header, setHeader] = React.useState<string[]>([]);
+    const [content, setContent] = React.useState<any[]>([]);
     React.useEffect(() => {
         if (props.data.length > 0) {
             let rawHeader = Object.keys(props.data[0]);
@@ -37,9 +41,10 @@ export const RawDataTable: React.FunctionComponent<TableProps> = (props) => {
                 rawHeader = rawHeader.filter(value => !props.ignore?.includes(value));
             }
             setHeader(rawHeader);
+            setContent(props.data);
         }
-    }, [props.data, header]);
-    return (<DataTable data={props.data} header={header} headings={header}/>);
+    }, [props.data]);
+    return (<DataTable data={content} header={header} headings={header}/>);
 }
 
 const DataTable: React.FunctionComponent<DataTableProps> = (props) => {
