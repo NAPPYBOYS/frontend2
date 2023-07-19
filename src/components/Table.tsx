@@ -26,7 +26,7 @@ export const HumanReadableDataTable: React.FunctionComponent<TableProps> = (prop
             setHumanReadaleHeader(convertSnakeToHumanReadable(rawHeader));
             setContent(props.data);
         }
-    }, [props.data]);
+    }, [props.data.length,props.ignore?.length]);
     console.log(props.data)
     return (<DataTable data={content} header={header} headings={humanReadaleHeader} />);
 }
@@ -43,7 +43,7 @@ export const RawDataTable: React.FunctionComponent<TableProps> = (props) => {
             setHeader(rawHeader);
             setContent(props.data);
         }
-    }, [props.data]);
+    });
     return (<DataTable data={content} header={header} headings={header}/>);
 }
 

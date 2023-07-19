@@ -11,7 +11,7 @@ export const ModelCreatePage: React.FunctionComponent = () => {
     let navigate = useNavigate();
     const [datasets, setDatasets] = React.useState<DatasetListView[]>([])
     const [selectedDataset, setSelectedDataset] = React.useState<DatasetListView>({} as DatasetListView)
-    const [trainParameters, ] = React.useState<TrainParameters>({} as TrainParameters);
+    const [trainParameters,] = React.useState<TrainParameters>({} as TrainParameters);
     const [inceptionParams, setInceptionParams] = React.useState<InceptionParams>({} as InceptionParams);
     const [snackbarOpen, setSnackbarOpen] = React.useState<boolean>(false);
     const [snackbarMessage, setSnackbarMessage] = React.useState<string>("");
@@ -26,108 +26,110 @@ export const ModelCreatePage: React.FunctionComponent = () => {
     };
 
 
-
     let handleClose = () => {
         setSnackbarOpen(false);
     }
     let steps = [
-        {
-            label: "Select a Dataset",
-            content: (
-                <Stack>
-                    <List>
-                        {datasets.map((item, index) => (
-                            <ListItem key={item.id}>
-                                <ListItemText primary={item.name}/>
-                                <ListItemSecondaryAction>
-                                    <Switch
-                                        onChange={(e) => {
-                                            if (selectedDataset.id === item.id) {
-                                                setSelectedDataset({} as DatasetListView)
-                                            } else {
-                                                setSelectedDataset(item)
+            {
+                label: "Select a Dataset",
+                content: (
+                    <Stack>
+                        <List>
+                            {datasets.map((item, index) => (
+                                <ListItem key={item.id}>
+                                    <ListItemText primary={item.name}/>
+                                    <ListItemSecondaryAction>
+                                        <Switch
+                                            onChange={(e) => {
+                                                if (selectedDataset.id === item.id) {
+                                                    setSelectedDataset({} as DatasetListView)
+                                                } else {
+                                                    setSelectedDataset(item)
+                                                }
                                             }
-                                        }
-                                        }
-                                        checked={selectedDataset.id === item.id}
-                                    />
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        ))}
-                    </List>
-                </Stack>
-            ),
-            complete: () => {
-                return selectedDataset.id !== undefined;
+                                            }
+                                            checked={selectedDataset.id === item.id}
+                                        />
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Stack>
+                ),
+                complete: () => {
+                    return selectedDataset.id !== undefined;
+                }
+            },
+            {
+                label: "Ready, Set, Train!",
+                content: (
+                    <Box>
+                        <FormControl>
+                            <Typography> General Parameters</Typography>
+                            <Stack spacing={2}>
+                                <TextField
+                                    label="Input Length"
+                                    type="number"
+                                    onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "input_length")}
+                                />
+                                <TextField
+                                    label="Learning Rate"
+                                    onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "learning_rate")}
+                                />
+                                <TextField
+                                    label="Batch Size"
+                                    type="number"
+                                    onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "batch_size")}
+                                />
+                                <TextField
+                                    label="Epochs"
+                                    type="number"
+                                    onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "epochs")}
+                                />
+                                <Typography gutterBottom>Validation Split</Typography>
+                                <Slider
+                                    marks
+                                    max={1}
+                                    min={0}
+                                    step={0.1}
+                                    valueLabelDisplay="on"
+                                    value={inceptionParams.validation_split}
+                                    onChange={(e, val) => handleInceptionParamsChange(val, "validation_split")}
+                                />
+                                <Divider/>
+                                <Typography>Inception Architecture Parameters</Typography>
+                                <TextField
+                                    label="N° Modules"
+                                    type="number"
+                                    onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "n_modules")}
+                                />
+                                <TextField
+                                    label="Embedding Size"
+                                    type="number"
+                                    onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "embedding_size")}
+                                />
+                            </Stack>
+                        </FormControl>
+                        <Snackbar
+                            open={snackbarOpen}
+                            autoHideDuration={6000}
+                            onClose={handleClose}
+                            message={snackbarMessage}
+                            color={severity}/>
+                    </Box>
+
+
+                ),
+                complete: () => {
+                    return true;
+                }
+
+
             }
-        },
-        {
-            label: "Ready, Set, Train!",
-            content: (
-                <Stack>
-                    <FormControl>
-                        <Typography> General Parameters</Typography>
-                        <TextField
-                            label="Input Length"
-                            type="number"
-                            onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "input_length")}
-                        />
-                        <TextField
-                            label="Learning Rate"
-                            onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "learning_rate")}
-                        />
-                        <TextField
-                            label="Batch Size"
-                            type="number"
-                            onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "batch_size")}
-                        />
-                        <TextField
-                            label="Epochs"
-                            type="number"
-                            onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "epochs")}
-                        />
-                        <Typography gutterBottom>Validation Split</Typography>
-                        <Slider
-                            marks
-                            max={1}
-                            min={0}
-                            step={0.1}
-                            valueLabelDisplay="on"
-                            value={inceptionParams.validation_split}
-                            onChange={(e,val) => handleInceptionParamsChange(val, "validation_split")}
-                        />
-                        <Divider/>
-                        <Typography>Inception Architecture Parameters</Typography>
-                        <TextField
-                            label="N° Modules"
-                            type="number"
-                            onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "n_modules")}
-                        />
-                        <TextField
-                            label="Embedding Size"
-                            type="number"
-                            onChange={(e) => handleInceptionParamsChange(Number(e.target.value), "embedding_size")}
-                        />
-
-                    </FormControl>
-                    <Snackbar
-                        open={snackbarOpen}
-                        autoHideDuration={6000}
-                        onClose={handleClose}
-                        message={snackbarMessage}
-                        color={severity}/>
-
-                </Stack>
-            ),
-            complete: () => {
-                return true;
-            }
 
 
-        }
-
-
-    ];
+        ]
+    ;
     React.useEffect(() => {
         api.getDatasetsDatasetGet().then((response) => {
             setDatasets(response.data)
@@ -145,7 +147,7 @@ export const ModelCreatePage: React.FunctionComponent = () => {
         realTrainParameters.parameters = inceptionParams as InceptionParams;
         realTrainParameters.dataset_id = selectedDataset.id;
         realTrainParameters.architecture = "INCEPTION";
-        realTrainParameters.name="INCEPTION";
+        realTrainParameters.name = "INCEPTION";
         console.log(realTrainParameters);
         api.createModelModelTrainPost(realTrainParameters).then((response) => {
             if (response.status === 200) {
@@ -164,10 +166,16 @@ export const ModelCreatePage: React.FunctionComponent = () => {
 
     return (
         <Box sx={{
-            marginTop:"10vh",
-            maxWidth: 400
+            marginTop: "10vh",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
         }}>
-            <Stepper activeStep={activeStep} orientation="vertical">
+            <Typography level='h1' sx={{marginBottom:"2vh"}}>Welcome to Build-A-Model</Typography>
+            <Stepper activeStep={activeStep} orientation="vertical" sx={{
+                width: "50%",
+                textAlign:"left"
+            }}>
                 {steps.map((step, index) =>
                     (<Step key={step.label}>
                         <StepLabel>
@@ -175,7 +183,7 @@ export const ModelCreatePage: React.FunctionComponent = () => {
                         </StepLabel>
                         <StepContent>
                             {step.content}
-                            <Box sx={{mb: 2}}>
+                            <Box sx={{mb: 2}} alignItems="right">
                                 <div>
                                     <Button
                                         disabled={!step.complete()}

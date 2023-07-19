@@ -1,5 +1,5 @@
 import {groupBy} from "../utils/array";
-import React, {useCallback, useEffect} from "react";
+import React, {useEffect} from "react";
 import {BaselineProcessModelDetailedView, BaselineProcessModelListView, DatasetDetailedView} from "../api";
 import {useAPIClient} from "../api/bridge";
 import {Box, Stack} from "@mui/joy";
@@ -7,7 +7,6 @@ import Typography from '@mui/joy/Typography';
 import {mapSnakeToHumanReadable} from "../utils/text";
 import {HumanReadableDataTable, RawDataTable} from "../components/Table";
 import {useParams} from "react-router-dom";
-import {getBaselineDetail, getBaselines} from "../utils/baselines";
 import {BaselineProcessModelDisplay} from "../components/PetriNetView";
 
 
@@ -23,8 +22,8 @@ export const DatasetDetailPage: React.FunctionComponent<any> = () => {
     useEffect(() => {
         api.getDatasetDatasetDatasetIdGet(datasetId).then((response) => {
                 setDataset(response.data as DatasetDetailedView);
-                setValueSplits(groupBy(response.data.metrics.values, "type"));
-                mapSnakeToHumanReadable(Object.keys(valueSplits));
+                let newValueSplits = groupBy(response.data.metrics.values, "type")
+                setValueSplits(newValueSplits);
             api.getBaselineProcessesDatasetDatasetIdBaselinesGet(id).then((response) => {
                 // eslint-disable-next-line array-callback-return
                 response.data.map((baseline: BaselineProcessModelListView) => {
@@ -38,24 +37,24 @@ export const DatasetDetailPage: React.FunctionComponent<any> = () => {
 
                         });
                         setMetrics(m => {
-                            let newMetrics = metrics;
+                            let newMetrics = m;
                             newMetrics[baseline.algorithm + ""] = {...{name: baseline.algorithm}, ...bb.metrics};
+                            setMetricsList(Object.keys(newMetrics))
                             return newMetrics;
 
                         })
                     })
                 })
-                setMetricsList(Object.keys(metrics))
+
             })
 
 
             });
-    }, [api,metrics]);
-    console.log(metrics)
+    }, [api,dataset.id,datasetId,id]);
     return (
         <Box>
+            <Typography level='h1'>{dataset.name}</Typography>
             <Stack spacing={4}>
-                <Typography level='h1'>{dataset.name}</Typography>
                 <Typography>{dataset.description}</Typography>
                 {Object.keys(valueSplits).map((split) =>
                     <>

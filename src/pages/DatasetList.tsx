@@ -28,7 +28,7 @@ export const DatasetListPage = () => {
                     ))}
                 </List>
                 <Stack>
-                    <Button onClick={() => setModalOpen(true)}>Add Dataset</Button>
+                    <Button onClick={() => setModalOpen(true)} sx={{mt: 1, mr: 1}}>Add Dataset</Button>
                 </Stack>
             </Stack>
             <Modal
