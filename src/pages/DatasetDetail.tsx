@@ -45,12 +45,13 @@ export const DatasetDetailPage: React.FunctionComponent<any> = () => {
                         })
                     })
                 })
-                setMetrics(Object.keys(metrics))
+                setMetricsList(Object.keys(metrics))
             })
 
 
             });
-    }, [metricsList]);
+    }, [api,metrics]);
+    console.log(metrics)
     return (
         <Box>
             <Stack spacing={4}>
@@ -67,7 +68,7 @@ export const DatasetDetailPage: React.FunctionComponent<any> = () => {
                 <Stack spacing={3}>
                     {Object.values(baselines).map((baseline) => <BaselineProcessModelDisplay id={baseline.id}
                                                                                              algorithm={baseline.algorithm + ""}/>)}
-                    <HumanReadableDataTable data={Object.values(metrics)} ignore={["id"]}/>
+                    <HumanReadableDataTable data={metricsList.map((m) => metrics[m])} ignore={["id"]}/>
 
                 </Stack>
 

@@ -18,7 +18,7 @@ export const ModelListPage = () => {
                 })
             }
         });
-    }, []);
+    }, [api]);
     return (
         <Box sx={{display: 'flex', justifyContent: 'center',}}>
             <Stack>

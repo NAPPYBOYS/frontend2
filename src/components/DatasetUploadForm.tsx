@@ -42,7 +42,7 @@ export const DatasetUploadForm: React.FunctionComponent = () => {
     };
     return <Box>
         <Box>
-            <Stack>
+            <Stack spacing={2}>
                 <Typography level="h3">Upload Dataset</Typography>
                 <TextField label="Name" value={name} onChange={(e) => setName(e.target.value)}/>
                 <TextField label="Description" value={description} onChange={(e) => setDescription(e.target.value)}/>

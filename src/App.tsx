@@ -10,7 +10,7 @@ function App() {
             <AppBar position="static">
                 <Toolbar>
                     <Typography component="div" sx={{flexGrow: 1}}>
-                        <a href="/">NAP</a>
+                        <a href="/" style={{    all: "unset",color:"White",fontWeight:"bold"}}>NAP</a>
                     </Typography>
                 </Toolbar>
             </AppBar>

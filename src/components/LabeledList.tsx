@@ -12,6 +12,7 @@ export const LabeledList: React.FunctionComponent<LabeledListProps> = (props) =>
     const [header, setHeader] = React.useState<string[]>([]);
     const [humanReadaleHeader, setHumanReadaleHeader] = React.useState<{ [key: string]: string }>({});
     React.useEffect(() => {
+        if(!props.data) return;
         setHeader(Object.keys(props.data));
         setHumanReadaleHeader(mapSnakeToHumanReadable(Object.keys(props.data)));
 

@@ -92,6 +92,7 @@ export const ModelCreatePage: React.FunctionComponent = () => {
                             max={1}
                             min={0}
                             step={0.1}
+                            valueLabelDisplay="on"
                             value={inceptionParams.validation_split}
                             onChange={(e,val) => handleInceptionParamsChange(val, "validation_split")}
                         />

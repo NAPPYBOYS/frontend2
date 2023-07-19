@@ -9,8 +9,9 @@ import React from "react";
 import {useAPIClient} from "../api/bridge";
 import {useParams} from "react-router-dom";
 import {LearnedProcessModelDisplay, BaselineProcessModelDisplay} from "../components/PetriNetView";
-import {Stack} from "@mui/joy";
+import {Divider, Stack, Typography} from "@mui/joy";
 import {HumanReadableDataTable} from "../components/Table";
+import {LabeledList} from "../components/LabeledList";
 
 
 type ModelSummary = {
@@ -68,15 +69,14 @@ export const ModelDetailPage: React.FunctionComponent = () => {
         }, [model.id,dataset.id]);
         return (
             <Stack>
-                <ul>
-                    <li>{dataset?.name}</li>
-                    <li>{params?.input_length}</li>
-                    <li>{params?.n_modules}</li>
-                </ul>
+                <Typography level="h1">Model Detail</Typography>
+                <Typography level="h5" justifyContent="left">Parameters</Typography>
+                <LabeledList data={model?.parameters}/>
                 <Stack>
+                    <LearnedProcessModelDisplay id={model.id}/>
+                    <Divider sx={{marginTop:"5vh",marginBottom:"5vh"}}/>
                     {Object.values(baselines).map((baseline) => <BaselineProcessModelDisplay id={baseline.id}
                                                                               algorithm={baseline.algorithm + ""}/>)}
-                    <LearnedProcessModelDisplay id={model.id}/>
                 </Stack>
                 <HumanReadableDataTable data={Object.values(metrics)} ignore={["id"]}/>
 
